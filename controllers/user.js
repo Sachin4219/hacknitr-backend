@@ -49,6 +49,45 @@ export const registerUser = (req, res) => {
   }
 };
 
+export const forgotUser = (req, res) => {
+  const { username, password } = req.body;
+  try {
+    // console.log(username,password)
+
+    // Find if username already exists or not
+    User.findOne({ username }, async (err, foundUser) => {
+      if (err) throw err;
+      else {
+        // If user already exists
+        if (foundUser) {
+          // console.log('"' + username + '" is already taken');
+          const hash = await bcrypt.hash(password, 10);
+          // console.log("Hash created", hash)
+          foundUser.password = password
+          await foundUser.save();
+
+          // console.log("User Created: ", {
+          //   username: newUser.username,
+          //   token: generateToken(newUser),
+          // });
+          res.status(201).json({
+            username: foundUser.username,
+            token: generateToken(foundUser),
+          });
+        } else {
+          res
+            .status(409)
+            .json({ message: 'error user not found' });
+          // Create hash
+        }
+      }
+    });
+  } catch (error) {
+    // console.log("Unable to register User");
+    res.status(409).json({ message: error.message });
+  }
+};
+
 export const loginUser = async (req, res) => {
   const { username, password } = req.body;
   // console.log(req.body)
