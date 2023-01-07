@@ -11,7 +11,7 @@ export const generateToken = (doctor) => {
 };
 
 export const registerDoctor = (req, res) => {
-  const { username, password, email, speciality } = req.body;
+  const { username, password, email, speciality, registrationNo } = req.body;
   try {
     // console.log(username,password)
     // Find if username already exists or not
@@ -29,7 +29,7 @@ export const registerDoctor = (req, res) => {
           const hash = await bcrypt.hash(password, 10);
           // console.log("Hash created", hash)
 
-          const newDoctor = new Doctor({ username, password: hash, email, speciality});
+          const newDoctor = new Doctor({ username, password: hash, email, speciality, registrationNo});
           await newDoctor.save();
 
           // console.log("Doctor Created: ", {
