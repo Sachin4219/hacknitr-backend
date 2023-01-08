@@ -1,2 +1,1 @@
-# hackmait-back
-# hackmait-back
+# hackbitr-backend
